@@ -12,6 +12,7 @@ namespace NameGenerator
         private Dictionary<string, List<string>> _cultures = new Dictionary<string, List<string>>();
         private const string _cultureNone = "<None>";
         private string _cultureDirectory = Path.Combine(Directory.GetCurrentDirectory(), "Cultures");
+        private bool _loadingCulture = false;
 
     public MainForm()
         {
@@ -217,6 +218,7 @@ namespace NameGenerator
             sfd.InitialDirectory = namesDirectory;
             sfd.FileName = namefile;
             sfd.Title = "Save Names to File";
+            sfd.OverwritePrompt = false;
             
             if (sfd.ShowDialog() != DialogResult.OK)
                 return;
@@ -235,7 +237,7 @@ namespace NameGenerator
 
             foreach (string name in lbNames.CheckedItems)
             {
-                names.Add(name);
+                names.Add(GetCleanName(name));
             }
 
             File.WriteAllLines(fileName, names.ToArray());
@@ -268,10 +270,10 @@ namespace NameGenerator
         #region Languages List Box Handlers
         private void lbLanguages_ItemCheck(object sender, ItemCheckEventArgs e)
         {
-            if (ddlCultures.SelectedIndex != 0)
+            if (ddlCultures.SelectedIndex != 0  && !_loadingCulture)
                 ddlCultures.SelectedIndex = 0;
 
-            btnGenerate.Enabled = lbLanguages.CheckedItems.Count > 0 || e.NewValue == CheckState.Checked;
+            btnGenerate.Enabled = lbLanguages.CheckedItems.Count > 1 || e.NewValue == CheckState.Checked;
         }
 
         private void lbLanguages_SelectedIndexChanged(object sender, EventArgs e)
@@ -281,18 +283,21 @@ namespace NameGenerator
         #endregion // Languages List Box Handlers
 
         #region Names List Box Handlers
+        private void lbNames_MouseUp(object sender, MouseEventArgs e)
+        {
+            int index = lbNames.IndexFromPoint(e.Location);
+
+            if (e.Button == MouseButtons.Right)
+            {
+                string name = lbNames.Items[index].ToString();
+
+                Clipboard.SetText(GetCleanName(name));
+            }           
+        }
+
         private void lbNames_ItemCheck(object sender, ItemCheckEventArgs e)
         {
             btnSaveNames.Enabled = e.NewValue == CheckState.Checked || lbNames.CheckedItems.Count > 1;
-        }
-        private void lbNames_MouseClick(object sender, MouseEventArgs e)
-        {
-            btnSaveNames.Enabled = lbLanguages.CheckedItems.Count > 0;
-        }
-
-        private void lbNames_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            lbNames.ClearSelected();
         }
         #endregion // Names List Box Handlers
 
@@ -303,12 +308,23 @@ namespace NameGenerator
                 return;
 
             List<string> cultureLanguages = _cultures[(string)ddlCultures.SelectedItem];
-           
+
+            _loadingCulture = true;
+            
             for (int x = 0; x < lbLanguages.Items.Count; x++)
             {
                 lbLanguages.SetItemChecked(x, cultureLanguages.Contains(lbLanguages.Items[x]));
             }
+
+            _loadingCulture = false;
         }
         #endregion // Cultures Drop Down Handlers
+
+        private static string GetCleanName(string name)
+        {
+            int parenthesisIndex = name.IndexOf(" (");
+
+            return parenthesisIndex > 0 ? name.Substring(0, parenthesisIndex) : name;
+        }
     }
 }

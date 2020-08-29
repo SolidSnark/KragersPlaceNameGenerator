@@ -150,8 +150,7 @@
             this.lbNames.Size = new System.Drawing.Size(365, 424);
             this.lbNames.TabIndex = 0;
             this.lbNames.ItemCheck += new System.Windows.Forms.ItemCheckEventHandler(this.lbNames_ItemCheck);
-            this.lbNames.MouseClick += new System.Windows.Forms.MouseEventHandler(this.lbNames_MouseClick);
-            this.lbNames.SelectedIndexChanged += new System.EventHandler(this.lbNames_SelectedIndexChanged);
+            this.lbNames.MouseUp += new System.Windows.Forms.MouseEventHandler(this.lbNames_MouseUp);
             // 
             // numNumberToGenerate
             // 
