@@ -1,11 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace NameGenerator
 {
     public class LanguageBase
     {
+        private enum FileFormat
+        {
+            Format1,
+            Format2,
+            Unrecognized
+        }
+
         public string Name { get; set; }
         public string Filename { get; set; }
         public int Min { get; set; }
@@ -29,12 +37,19 @@ namespace NameGenerator
         {
             LanguageBase lBase = new LanguageBase();
 
-            string[] parts = baseString.Split('|');
-
-            if (parts.Length < 6)
+            FileFormat format = DetectFormat(baseString);
+            if (format == FileFormat.Unrecognized)
             {
-                throw new Exception("Invalid file format.  Too few parameters.");
+                throw new Exception("Invalid file.  Format not recognized.");
             }
+
+            if (format == FileFormat.Format2)
+            {
+                baseString = baseString.Replace("\n", "");
+                baseString = baseString.Replace("\r", "|");
+            }
+
+            string[] parts = baseString.Split('|');
 
             lBase.Name = parts[0];
 
@@ -73,6 +88,27 @@ namespace NameGenerator
             }
 
             return lBase;
+        }
+
+        private static FileFormat DetectFormat(string langFile)
+        {
+            int pipeCount = langFile.Count(f => f == '|');
+
+            if (pipeCount == 5)
+            {
+                return FileFormat.Format1;
+            }
+
+            if (pipeCount == 4)
+            {
+                int crCount = langFile.Count(f => f == '\r');
+                if (crCount == 1)
+                {
+                    return FileFormat.Format2;
+                }
+            }
+
+            return FileFormat.Unrecognized;
         }
     }
 }
