@@ -11,6 +11,12 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Update="FantasyPlaceNameGenerator.docx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="License.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="Original Azgaar Languages\Arabic.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

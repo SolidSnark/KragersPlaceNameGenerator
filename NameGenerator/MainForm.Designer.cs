@@ -291,7 +291,7 @@
             this.Controls.Add(this.btnGenerate);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
             this.Name = "MainForm";
-            this.Text = "Fantasy Name Generator";
+            this.Text = "Fantasy Place Name Generator";
             ((System.ComponentModel.ISupportInitialize)(this.numNumberToGenerate)).EndInit();
             this.grpInputSettings.ResumeLayout(false);
             this.grpInputSettings.PerformLayout();
