@@ -4,6 +4,11 @@
     <OutputType>WinExe</OutputType>
     <TargetFramework>netcoreapp3.0</TargetFramework>
     <UseWindowsForms>true</UseWindowsForms>
+    <PackageId>KragersPlaceNameGenerator</PackageId>
+    <Authors>KragersPlaceNameGenerator</Authors>
+    <Product>KragersPlaceNameGenerator</Product>
+    <Company>KragersPlaceNameGenerator</Company>
+    <AssemblyName>KragersPlaceNameGenerator</AssemblyName>
   </PropertyGroup>
 
   <ItemGroup>
